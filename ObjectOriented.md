@@ -74,7 +74,7 @@ matt.greet(); //logs 'Hello!  My name is Matt'
 
 ## Use constructor functions to make creating multiple similar objects easy
 
-If you need to create multiple objects of the same type, object literals (`{ property:'value'}`) can be inefficient.  We can create constructor functions, which act like a blueprint (or class) for creating classes.
+If you need to create multiple objects of the same type, object literals (`{ property:'value'}`) can be inefficient.  We can create constructor functions, which act like a blueprint (or class) for creating objects.
 
 ```javascript
 var Person = function(){
