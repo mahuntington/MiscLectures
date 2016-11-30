@@ -3,8 +3,10 @@
 ## Lesson Objectives
 
 1. Use JavaScript objects to model the real world
-1. Assign functions to variables
+1. Assign functions to variables and properties of objects
 1. Use methods to access properties of the object
+1. Use constructor functions to make creating multiple similar objects easy
+1. Create a base class which can be used to create child classes
 
 ## Use JavaScript objects to model the real world
 
@@ -31,7 +33,7 @@ matt.age = 40;
 matt.eyes = 'green';
 ```
 
-## Assign functions to variables
+## Assign functions to variables and properties of objects
 
 Functions are objects and can be assigned to variables
 
@@ -70,9 +72,9 @@ var matt = {
 matt.greet(); //logs 'Hello!  My name is Matt'
 ```
 
-## Object Oriented JS
+## Use constructor functions to make creating multiple similar objects easy
 
-If you need to create multiple objects of the same type, object literals (`{ property:'value'}`) can be inefficient.  We can create constructor functions, which act like class declarations.
+If you need to create multiple objects of the same type, object literals (`{ property:'value'}`) can be inefficient.  We can create constructor functions, which act like a blueprint (or class) for creating classes.
 
 ```javascript
 var Person = function(){
@@ -101,7 +103,7 @@ console.log(me);
 console.log(someoneElse);
 ```
 
-Methods act just like adding properties
+Methods are added just like adding properties
 
 ```javascript
 var Person = function(name){
@@ -129,6 +131,8 @@ var Person = function(){
 Person.genders = ['male', 'female'];
 console.log(Person.genders);
 ``` -->
+
+## Create a base class which can be used to create child classes
 
 We can have a "class" inherit from another class, using the `.call` static method of a function
 
