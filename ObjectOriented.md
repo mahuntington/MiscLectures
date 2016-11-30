@@ -7,6 +7,9 @@
 1. Use methods to access properties of the object
 1. Use constructor functions to make creating multiple similar objects easy
 1. Create a base class which can be used to create child classes
+1. Use prototype to assign properties to a class
+1. Assign the correct prototype to a sub class 
+1. Correctly assign the constructor of a child class
 
 ## Use JavaScript objects to model the real world
 
@@ -149,3 +152,122 @@ var Humvee = function(){
 var murica = new Humvee();
 console.log(murica);
 ```
+
+## Use prototype to assign properties to a class
+
+The problem with using `this.wheels = 4` inside a constructor function is that the code runs each time you create a new object.  This is redundant.
+
+Instead we can assign the property to the function's `.prototype` property instead.
+
+```javascript
+var Car = function(){
+}
+Car.prototype.wheels = 4;
+var myCar = new Car();
+console.log(myCar.wheels);
+```
+
+- `Car.prototype.wheels = 4;` runs only once, but all instances of the Car class have the wheels property already set.  You can do this with any property you want
+- If you do `console.log(myCar)` you'll notice that you can inspect the prototype of the Class of the object by looking at the `.__proto__` property.  There you'll find the .wheels property you added to `Car.prototype`
+- When you look for a property of an object, it will first look on the object itself, then on its prototype, then on the prototype's prototype, etc...
+
+## Assign the correct prototype to a sub class 
+
+If we are using prototype to add methods and properties to our class, our inheritance process gets a little tricky
+
+```javascript
+var Person = function(){
+}
+
+Person.prototype.legs = 2;
+Person.prototype.arms = 2;
+
+var Student = function(){
+    Person.call(this);
+}
+
+var matt = new Student();
+
+console.log(matt.legs); //returns undefined?!
+```
+
+To fix this, we need to assign a person object to the `Student.prototype` property
+
+```javascript
+var Person = function(){
+}
+
+Person.prototype.legs = 2;
+Person.prototype.arms = 2;
+
+var Student = function(){
+    Person.call(this);
+}
+
+Student.prototype = Object.create(Person.prototype); //create a Person object, then assign it to the Student.prototype
+
+var matt = new Student();
+
+console.log(matt.legs); //returns 2
+```
+
+Now we've created a Person object and assigned it to the to Student's prototype property.  Now when a Student object looks for `.legs` it will go to the Student's `__proto__` (Person object) and then the `__proto__` of that object.
+
+## Correctly assign the constructor of a child class
+
+A good way to check a constructor is to log the `.__proto__.constructor` property:
+
+```javascript
+var Person = function(){
+    console.log('constructing person');
+}
+
+Person.prototype.legs = 2;
+Person.prototype.arms = 2;
+
+var matt = new Person();
+console.log(matt.__proto__.constructor);
+```
+
+This becomes a problem when doing inheritance:
+
+```javascript
+var Person = function(){
+    this.foo = 'bar';
+}
+
+Person.prototype.legs = 2;
+Person.prototype.arms = 2;
+
+var Student = function(){
+    Person.call(this);
+}
+
+Student.prototype = Object.create(Person.prototype);
+
+var matt = new Student();
+
+console.log(matt.__proto__.constructor); //logs Person?!
+```
+
+This is because we are wiping out the normal constructor function when we reassign the prototype.  To fix this, we need to add the constructor back in:
+
+```javascript
+var Person = function(){
+    this.foo = 'bar';
+}
+
+Person.prototype.legs = 2;
+Person.prototype.arms = 2;
+
+var Student = function(){
+    Person.call(this);
+}
+
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.constructor = Student; //add the constructor back in to the prototype
+
+var matt = new Student();
+
+console.log(matt.__proto__.constructor);
+````
